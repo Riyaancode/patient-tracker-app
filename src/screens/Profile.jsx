@@ -1,14 +1,39 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, ImageBackground, TextInput, ScrollView } from 'react-native';
 import { SIZES, theme } from '../constant';
-import { Ionicons } from '@expo/vector-icons';
-import FlatListWithTabs from '../components/FlatListWithTabs';
-import { LinearGradient } from 'expo-linear-gradient';
+import {  ref, set, push, onValue } from "firebase/database";
 import { getAuth, signOut } from "firebase/auth";
 import Btn from '../components/Btn';
+import { useEffect, useState } from 'react';
+import { database } from '../firebaseConfig';
 
 export default function Profile({navigation}) {
-    const auth = getAuth();
+    const auth = getAuth()
+const [currUser, SetCurrUser] = useState({});
+
+    useEffect(()=>{
+        getData();
+    },[])
+
+console.log(">>>>",currUser)
+function getData(params) {
+    const starCountRef = ref(database, 'users/');
+    onValue(starCountRef, (snapshot) => {
+      const data = snapshot.val();
+      const emailToFind = auth.currentUser.email;
+      const matchingObjects=[];
+      for (const key in data) {
+        if (data.hasOwnProperty(key) && data[key].email === emailToFind) {
+          const matchingObject = {
+            id: key,
+            ...data[key]
+          };
+          matchingObjects.push(matchingObject);
+        }
+      }
+      SetCurrUser(matchingObjects[0]);
+    });
+}
 
     const logout = ()=>{
         signOut(auth).then(() => {
@@ -33,20 +58,20 @@ export default function Profile({navigation}) {
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={styles.field}>
                         <Text style={styles.label}>Name</Text>
-                        <Text style={styles.textField}>Dr Abdul Qadeer</Text>
+                        <Text style={styles.textField}>{currUser.name}</Text>
                     </View>
                     <View style={styles.field}>
                         <Text style={styles.label}>Email</Text>
-                        <Text style={styles.textField}>{auth.currentUser.email}</Text>
+                        <Text style={styles.textField}>{currUser.email}</Text>
                     </View>
-                    <View style={styles.field}>
+                    {/* <View style={styles.field}>
                         <Text style={styles.label}>Date of birth</Text>
                         <Text style={styles.textField}>1-JAN-1980</Text>
                     </View>
                     <View style={styles.field}>
                         <Text style={styles.label}>Location</Text>
                         <Text style={styles.textField}>2216 Oakway Lane, Woodland Hills, California, United States</Text>
-                    </View>
+                    </View> */}
                     <Btn title={"Signout"} submitFunct={logout} />
                 </ScrollView>
                 

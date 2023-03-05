@@ -19,37 +19,37 @@ import { database } from "../firebaseConfig";
 
 
 
-const ListItem = ({ title, subtitle }) => (
+const ListItem = ({ name, appointmentdate }) => (
   <View style={styles.list}>
     <Image style={styles.listImg} source={require("../assets/img/patient-img.png")} />
     <View>
-    <Text>{title}</Text>
-    <Text>{subtitle}</Text>
+      <Text style={styles.name}>{name}</Text>
+      <Text style={styles.date}>{appointmentdate}</Text>
     </View>
   </View>
 );
 
-const FlatListWithTabs = ({patientData}) => {
+const FlatListWithTabs = ({ patientData }) => {
   // const [data,setPatientsData] = useState([])
   // const data = []
   const [data, setData] = useState([]);
 
-  const tabs = [{disease: "All"}];
-const diseases = data.map(item => item.disease);
-const distinctDiseases = [...new Set(diseases)];
+  const tabs = [{ disease: "All" }];
+  const diseases = data.map(item => item.disease);
+  const distinctDiseases = [...new Set(diseases)];
 
-distinctDiseases.forEach(disease => {
-  tabs.push({disease});
-});
+  distinctDiseases.forEach(disease => {
+    tabs.push({ disease });
+  });
   // const tabs = data.map(item => ({ disease: item.disease }));
   // console.log()
   const [selectedTab, setSelectedTab] = useState(0);
   const [filteredData, setFilteredData] = useState(
     tabs.map(() => data)
   );
-   
 
-// useEffect(()=>{
+
+  // useEffect(()=>{
 
   // const dbRef = ref(database);
   // get(child(dbRef, `patients/`)).then((snapshot) => {
@@ -63,89 +63,95 @@ distinctDiseases.forEach(disease => {
   //   console.error(error);
   // });
 
-//   console.log("hello")
-
-  
-// const starCountRef = ref(database, 'patients/');
-// onValue(starCountRef, (snapshot) => {
-//   const data = snapshot.val();
-//   // updateStarCount(postElement, data);
-//   console.log(data)
-// });
-// patientData ? patientData(): ""
+  //   console.log("hello")
 
 
-// }, [])
-
-useEffect(()=>{
-  const starCountRef = ref(database, 'patients/');
-onValue(starCountRef, (snapshot) => {
-const pdata = snapshot.val();
-// updateStarCount(postElement, data);
-const dataArray = Object.keys(pdata).map((key) => ({ id: key, ...pdata[key] }))
-console.log(dataArray)
-setData(dataArray)
-
-})
-
-// filterData(selectedTab);
-// setSelectedTab(0);
-// filterData(0);
-},[])
+  // const starCountRef = ref(database, 'patients/');
+  // onValue(starCountRef, (snapshot) => {
+  //   const data = snapshot.val();
+  //   // updateStarCount(postElement, data);
+  //   console.log(data)
+  // });
+  // patientData ? patientData(): ""
 
 
-// useEffect(() => {
-//   filterData(selectedTab);
-// }, [selectedTab]);
+  // }, [])
+
+  useEffect(() => {
+    const starCountRef = ref(database, 'patients/');
+    onValue(starCountRef, (snapshot) => {
+      const pdata = snapshot.val();
+      // console.log("pdata", pdata)
+      // updateStarCount(postElement, data);
+      const dataArray = Object.keys(pdata).map((key) => ({ id: key, ...pdata[key] }))
+      // console.log("dataArray", dataArray)
+      // console.log(dataArray)
+      setData(dataArray)
+      // setFilteredData(dataArray)
+      console.log('data=>>>>', dataArray)
+
+    },[])
+
+  }, [])
+
+
+  useEffect(()=>{
+    // filterData(0)
+    setFilteredData([data])
+  },[data])
 
 
 
 
-    const filterData = (tabIndex) => {
-        let filtered;
-        if (tabIndex ===0) {
-          filtered = data;
-          
-        } else {
-          filtered = data.filter((item) => item.disease === tabs[tabIndex].disease);
-        }
-        filteredData[tabIndex] = filtered;
-        setFilteredData([...filteredData]);
+
+  const filterData = (tabIndex) => {
+    let filtered;
+    if (tabIndex === 0) {
+       filtered = data;
        
 
-      };
+    } else {
+      filtered = data.filter((item) => item.disease === tabs[tabIndex].disease);
     
-      const handleTabPress = (tabIndex) => {
-        setSelectedTab(tabIndex);
-        filterData(tabIndex);
-      };
+    }
+
+    filteredData[tabIndex] = filtered;
+    setFilteredData([...filteredData]);
+  };
+
+
+
+  const handleTabPress = (tabIndex) => {
+    setSelectedTab(tabIndex);
+    filterData(tabIndex);
+  };
 
   return (
     <View style={styles.container}>
-      <View style={{paddingVertical:8}}>
-      <ScrollView style={styles.tabsList} horizontal showsHorizontalScrollIndicator={false}>
-        {tabs.map((tab, index) => (
-          <TouchableOpacity
-            key={tab.disease}
-            onPress={() => handleTabPress(index)}
-            style={[
-              styles.tab,
-              index === selectedTab ? styles.selectedTab : null,
-             
-            ]}
-          >
-            <Text
+      <View style={{ paddingVertical: 8 }}>
+        <ScrollView style={styles.tabsList} horizontal showsHorizontalScrollIndicator={false}>
+          {tabs.map((tab, index) => (
+            <TouchableOpacity
+              key={tab.disease}
+              onPress={() => handleTabPress(index)}
               style={[
-                styles.tabTitle,
-                index === selectedTab ? styles.selectedTabTitle : null,
+                styles.tab,
+                index === selectedTab ? styles.selectedTab : null,
+
               ]}
             >
-              {tab.disease}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-      
+              <Text
+                style={[
+                  styles.tabTitle,
+                  index === selectedTab ? styles.selectedTabTitle : null,
+                ]}
+              >
+                {tab.disease}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+
       </View>
       {/* { console.log(">>>>",selectedTab)} */}
       <FlatList
@@ -153,7 +159,7 @@ setData(dataArray)
         style={styles.listSec}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
-          <ListItem title={item.name} subtitle={item.disease} />
+          <ListItem name={item.name} appointmentdate={item.dateOfArrival} cost />
         )}
         keyExtractor={(item) => item.id.toString()}
       />
@@ -164,51 +170,58 @@ setData(dataArray)
 
 const styles = {
   container: {
-   paddingHorizontal:20,
-   flex:1
-   
+    paddingHorizontal: 20,
+    flex: 1
+
   },
   tab: {
     backgroundColor: "#daf4f5",
     marginHorizontal: 5,
-    borderRadius:6,
-   
+    borderRadius: 6,
+
     paddingHorizontal: 10,
     paddingVertical: 10,
-    height:40,
+    height: 40,
   },
   selectedTab: {
     backgroundColor: theme.COLORS.Primary,
   },
   tabTitle: {
     fontWeight: "bold",
-    color:theme.COLORS.Primary,
-    fontWeight:"700",
-    
+    color: theme.COLORS.Primary,
+    fontWeight: "700",
+
   },
   selectedTabTitle: {
-    color:"white"
+    color: "white"
   },
-  tabsList:{
+  tabsList: {
     // marginTop:30,
-  
+
   },
-  list:{
-    backgroundColor:theme.COLORS.secondary,
-    marginVertical:8,
-    padding:10,
-    borderRadius:8,
-    flexDirection:"row",
-    alignItems:"center"
+  list: {
+    backgroundColor: theme.COLORS.secondary,
+    marginVertical: 8,
+    padding: 10,
+    borderRadius: 8,
+    flexDirection: "row",
+    alignItems: "center"
   },
-  listImg:{
-    width:80,
-    height:80,
-    borderRadius:8,
-    marginRight:14
+  listImg: {
+    width: 80,
+    height: 80,
+    borderRadius: 8,
+    marginRight: 14
   },
-  listSec:{
-   flex:1
+  listSec: {
+    flex: 1
+  },
+  name: {
+    fontSize: 22,
+    fontWeight: "500"
+  },
+  date: {
+    color: theme.COLORS.secText
   }
 };
 

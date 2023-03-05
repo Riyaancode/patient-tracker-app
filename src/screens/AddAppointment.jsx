@@ -10,7 +10,7 @@ import {  ref, set, push } from "firebase/database";
 import { database } from '../firebaseConfig';
 import { useHeaderHeight } from '@react-navigation/elements';
 
-export default function AddAppointment() {
+export default function AddAppointment({navigation}) {
     const height = useHeaderHeight()
     const [date, setDate] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
@@ -63,6 +63,7 @@ export default function AddAppointment() {
       
     .then(() => {
         console.log("Sucessfully insert", patientId);
+        navigation.navigate("PatientList")
     })
     .catch((error) => {
         console.log("Error not", error);
