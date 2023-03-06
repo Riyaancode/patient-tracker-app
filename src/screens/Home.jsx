@@ -74,7 +74,7 @@ function getData(params) {
                 {/* </View> */}
 
                 <View style={{ flex:1, marginTop:30 }}>
-                <FlatListWithTabs   />
+                <FlatListWithTabs  navigation={navigation} />
                  </View> 
            
             </ImageBackground>

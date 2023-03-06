@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity, FlatList, Image } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, FlatList, Image, StyleSheet } from "react-native";
 import { theme } from '../constant';
 import { ref, child, get, onValue } from "firebase/database";
 import { database } from "../firebaseConfig";
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 
@@ -19,17 +20,22 @@ import { database } from "../firebaseConfig";
 
 
 
-const ListItem = ({ name, appointmentdate }) => (
+const ListItem = ({ navigation, name, dateOfArrival, gender, medication, cost, disease }) => (
   <View style={styles.list}>
-    <Image style={styles.listImg} source={require("../assets/img/patient-img.png")} />
-    <View>
-      <Text style={styles.name}>{name}</Text>
-      <Text style={styles.date}>{appointmentdate}</Text>
+    <View style={{ flexDirection: "row", alignItems: "center" }}>
+      <Image style={styles.listImg} source={require("../assets/img/patient-img.png")} />
+      <View>
+        <Text style={styles.name}>{name}</Text>
+        <Text style={styles.date}>{dateOfArrival}</Text>
+      </View>
     </View>
+    <TouchableOpacity onPress={() => navigation.navigate("PatientDetails", { name, dateOfArrival, gender, medication, cost, disease })}>
+      <Ionicons name="caret-forward" size={40} color={theme.COLORS.Primary} />
+    </TouchableOpacity>
   </View>
 );
 
-const FlatListWithTabs = ({ patientData }) => {
+const FlatListWithTabs = ({ patientData, navigation }) => {
   // const [data,setPatientsData] = useState([])
   // const data = []
   const [data, setData] = useState([]);
@@ -90,15 +96,15 @@ const FlatListWithTabs = ({ patientData }) => {
       // setFilteredData(dataArray)
       console.log('data=>>>>', dataArray)
 
-    },[])
+    }, [])
 
   }, [])
 
 
-  useEffect(()=>{
+  useEffect(() => {
     // filterData(0)
     setFilteredData([data])
-  },[data])
+  }, [data])
 
 
 
@@ -107,12 +113,12 @@ const FlatListWithTabs = ({ patientData }) => {
   const filterData = (tabIndex) => {
     let filtered;
     if (tabIndex === 0) {
-       filtered = data;
-       
+      filtered = data;
+
 
     } else {
       filtered = data.filter((item) => item.disease === tabs[tabIndex].disease);
-    
+
     }
 
     filteredData[tabIndex] = filtered;
@@ -159,7 +165,7 @@ const FlatListWithTabs = ({ patientData }) => {
         style={styles.listSec}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
-          <ListItem name={item.name} appointmentdate={item.dateOfArrival} cost />
+          <ListItem navigation={navigation} name={item.name} dateOfArrival={item.dateOfArrival} cost={item.cost} disease={item.disease} medication={item.medication} gender={item.gender} />
         )}
         keyExtractor={(item) => item.id.toString()}
       />
@@ -168,7 +174,7 @@ const FlatListWithTabs = ({ patientData }) => {
 };
 
 
-const styles = {
+const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
     flex: 1
@@ -205,7 +211,8 @@ const styles = {
     padding: 10,
     borderRadius: 8,
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
+    justifyContent: "space-between"
   },
   listImg: {
     width: 80,
@@ -223,7 +230,7 @@ const styles = {
   date: {
     color: theme.COLORS.secText
   }
-};
+});
 
 
 export default FlatListWithTabs;
