@@ -22,8 +22,12 @@ const [searchQuery, setSearchQuery] = useState("");
       console.log(newFilterData)
         getDoctorData();
         getPatientsData();
-        searchFilterFunction("")
+      
     },[])
+
+    useEffect(()=>{
+      searchFilterFunction("")
+    }, [newData])
 
 // console.log(">>>>",currUser)
 function getDoctorData(params) {
@@ -57,7 +61,7 @@ const getPatientsData = () => {
       const pdata = snapshot.val();
       const dataArray = Object.keys(pdata).map((key) => ({ id: key, ...pdata[key] }));
       setNewData(dataArray);
-    //   console.log("filtered data =>>>", dataArray);
+      console.log("fPr data =>>>", dataArray);
     });
 
   }
@@ -84,6 +88,7 @@ const getPatientsData = () => {
       // Update FilteredDataSource with masterDataSource
       setNewFilterData(newData)
       setSearchQuery(text);
+      console.log("els")
     }
   };
 
