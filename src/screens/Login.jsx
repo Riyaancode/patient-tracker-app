@@ -2,15 +2,16 @@
 import { StyleSheet, Text, View, Image, ImageBackground, TextInput, ScrollView, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { SIZES, theme } from '../constant';
 import { useHeaderHeight } from '@react-navigation/elements';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-// import { auth } from '../firebaseConfig';
+import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { auth } from '../firebaseConfig';
 import { useState } from 'react';
+import Btn from '../components/Btn';
 
 export default function Login({ navigation }) {
     const height = useHeaderHeight();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-const auth = getAuth();
+// const auth = getAuth();
 
     const handleEmail = (value) => {
         
@@ -22,14 +23,15 @@ const auth = getAuth();
     };
 
     const submit = () =>{
-        console.log(email)
-        console.log(password)
+        // console.log(email)
+        // console.log(password)
 
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           // Signed in 
           const user = userCredential.user;
-          navigation.replace("BottomTabs")
+          console.log("SucessFully Login", auth)
+        //   navigation.navigate("BottomTabs")
           // ...
         })
         .catch((error) => {
@@ -40,7 +42,14 @@ const auth = getAuth();
     }
 
 
-
+    const logout = ()=>{
+        signOut(auth).then(() => {
+            console.log("Logout", auth)
+          }).catch((error) => {
+            // An error happened.
+            console.log(error)
+          });
+    }
 
     return (
 

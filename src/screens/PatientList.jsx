@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import FlatListWithTabs from '../components/FlatListWithTabs';
 
 
-export default function PatientList() {
+export default function PatientList({navigation}) {
   return (
     
       <ImageBackground style={styles.bg} source={require("../assets/img/bg.png")}>
@@ -23,7 +23,7 @@ export default function PatientList() {
         </View>
         </View>
 
-        <FlatListWithTabs />
+        <FlatListWithTabs navigation={navigation} />
         </View>
       </ImageBackground>
    

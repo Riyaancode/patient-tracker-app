@@ -7,14 +7,14 @@ import { useEffect, useState } from 'react';
 import { database } from '../firebaseConfig';
 
 export default function PatientDetails({navigation, route}) {
-    const {name, dateOfArrival,  gender, medication, cost, disease } = route.params;
+    const {name, dateString,  gender, medication, cost, disease, dob } = route.params;
 
     return (
         
         <ImageBackground style={styles.bg} source={require("../assets/img/bg.png")}>
             <View style={styles.top}>
                 <View style={styles.section}>
-                <Image style={styles.userImg} source={require("../assets/img/default-avatar.png")} />
+                <Image style={styles.userImg} source={require("../assets/img/patient-img.png")} />
                     <Text style={styles.name}>{name}</Text>
                     <Text style={styles.disease}>{disease}</Text>
                 </View>
@@ -22,12 +22,16 @@ export default function PatientDetails({navigation, route}) {
             <View style={styles.information}>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={styles.field}>
-                        <Text style={styles.label}>Date of Arrival</Text>
-                        <Text style={styles.textField}>{dateOfArrival}</Text>
+                        <Text style={styles.label}>Appointment Date</Text>
+                        <Text style={styles.textField}>{dateString}</Text>
                     </View>
                     <View style={styles.field}>
                         <Text style={styles.label}>Gender</Text>
                         <Text style={styles.textField}>{gender}</Text>
+                    </View>
+                    <View style={styles.field}>
+                        <Text style={styles.label}>Date of Birth</Text>
+                        <Text style={styles.textField}>{dob}</Text>
                     </View>
                     <View style={styles.field}>
                         <Text style={styles.label}>Medication</Text>

@@ -69,14 +69,15 @@ const styles= StyleSheet.create({
   addBtn:{
   
     height:60,
-    width:'100%',
-    justifyContent:'center',
-    alignItems:'center',
+    // width:'100%',
+    // justifyContent:'center',
+    // alignItems:'center',
     position:'relative',
     top:-26,
     padding:0,
-    
-   
+    textAlign:'center',
+  //  backgroundColor:"blue",
+  //  borderRadius:50
    
   }
 })

@@ -6,18 +6,27 @@ import FlatListWithTabs from '../components/FlatListWithTabs';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState } from 'react';
 import { auth,database } from '../firebaseConfig';
-import {  ref, set, push, onValue } from "firebase/database";
+import {  ref, set, push, onValue, query, orderByChild, equalTo } from "firebase/database";
 import { getAuth } from 'firebase/auth';
 export default function Home({navigation}) {
 const auth = getAuth()
 const [currUser, SetCurrUser] = useState({});
+const [newData, setNewData] = useState([]);
+const [newFilterData, setNewFilterData] = useState([]);
+
+const [searchQuery, setSearchQuery] = useState("");
+
+
 
     useEffect(()=>{
-        getData();
+      console.log(newFilterData)
+        getDoctorData();
+        getPatientsData();
+        searchFilterFunction("")
     },[])
 
-console.log(">>>>",currUser)
-function getData(params) {
+// console.log(">>>>",currUser)
+function getDoctorData(params) {
     const starCountRef = ref(database, 'users/');
     onValue(starCountRef, (snapshot) => {
       const data = snapshot.val();
@@ -35,6 +44,50 @@ function getData(params) {
       SetCurrUser(matchingObjects[0]);
     });
 }
+
+
+const getPatientsData = () => {
+    const filteredRef = query(
+      ref(database, "patients"),
+      orderByChild("doctor"),
+      equalTo(auth.currentUser.uid)
+    );
+    
+    onValue(filteredRef, (snapshot) => {
+      const pdata = snapshot.val();
+      const dataArray = Object.keys(pdata).map((key) => ({ id: key, ...pdata[key] }));
+      setNewData(dataArray);
+    //   console.log("filtered data =>>>", dataArray);
+    });
+
+  }
+
+
+  const searchFilterFunction = (text) => {
+    // Check if searched text is not blank
+    if (text !== "") {
+      // Inserted text is not blank
+      // Filter the masterDataSource
+      // Update FilteredDataSource
+      const filterData =  newFilterData.filter(
+        function (item) {
+          const itemData = item.name
+            ? item.name.toUpperCase()
+            : ''.toUpperCase();
+          const textData = text.toUpperCase();
+          return itemData.indexOf(textData) > -1;
+      });
+      setNewFilterData(filterData)
+      setSearchQuery(text);
+    } else {
+      // Inserted text is blank
+      // Update FilteredDataSource with masterDataSource
+      setNewFilterData(newData)
+      setSearchQuery(text);
+    }
+  };
+
+  // console.log("------->",newData);
 
 
     return (
@@ -66,15 +119,15 @@ function getData(params) {
                         style={styles.searchInput}
                         placeholder="Search"
                         placeholderTextColor="gray"
-                    // onChangeText={setSearchQuery}
+                    onChangeText={(e)=> searchFilterFunction(e)}
                     // onSubmitEditing={handleSearch}
-                    // value={searchQuery}
+                    value={searchQuery}
                     />
                 </View>
                 {/* </View> */}
 
                 <View style={{ flex:1, marginTop:30 }}>
-                <FlatListWithTabs  navigation={navigation} />
+                <FlatListWithTabs  navigation={navigation} newData={newFilterData}  />
                  </View> 
            
             </ImageBackground>

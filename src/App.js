@@ -6,27 +6,49 @@ import Signup from './screens/Signup';
 import BottomTabs from './components/BottomTabs';
 import Login from './screens/Login';
 import PatientDetails from './screens/PatientDetails';
+import { auth } from './firebaseConfig';
+import SplashScreen from './screens/SplashScreen';
+import { useEffect, useState } from 'react';
 const Stack = createNativeStackNavigator();
 export default function App() {
-  
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSignedIn, setIsSignedIn] = useState(false);
+
+  useEffect(() => {
+    // Listen for authentication state changes and update the isSignedIn state
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setIsLoading(false);
+      setIsSignedIn(user !== null);
+    });
+
+    // Clean up the listener when unmounting
+    return unsubscribe;
+  }, []);
+
+  if (isLoading) {
+    return <SplashScreen />;
+  }
   return (
     // <View style={styles.container}>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName='BottomTabs'>
-        <Stack.Screen  name="Home" component={Home} options={{ headerShown: false }}  />
-        <Stack.Screen  name="Signup" component={Signup} options={{ headerShown: false }}  />
-        <Stack.Screen  name="Login" component={Login} options={{ headerShown: false }}  />
-        <Stack.Screen  name="BottomTabs" component={BottomTabs} options={{ headerShown: false }}  />
-        <Stack.Screen  name="PatientDetails" component={PatientDetails} options={{
-    
-      headerTransparent: true,
-      headerTitleAlign: 'left',
-      headerTitleStyle: {
-        marginLeft: 10,
-        fontSize: 20,
-      }, }}  />
+    <NavigationContainer>
+      <Stack.Navigator >
+        {isSignedIn? 
+           (<>
+            <Stack.Screen  name="BottomTabs" component={BottomTabs} options={{ headerShown: false }}  />
+            <Stack.Screen  name="Home" component={Home} options={{ headerShown: false }}  />
+            <Stack.Screen  name="PatientDetails" component={PatientDetails} options={{
+        
+          headerTransparent: true,
+          headerTitleAlign: 'left',
+          headerTitleStyle: {
+            marginLeft: 10,
+            fontSize: 20,
+          }, }}  /></>) :
+            (<><Stack.Screen  name="Signup" component={Signup} options={{ headerShown: false }}  />
+            <Stack.Screen  name="Login" component={Login} options={{ headerShown: false }}  /></>)
+        }
+      </Stack.Navigator>
 
-        </Stack.Navigator>
       {/* <BottomTabs /> */}
       {/* <Profile /> */}
       {/* <Home /> */}
@@ -34,9 +56,10 @@ export default function App() {
       {/* <AddAppointment /> */}
       {/* <Appointments /> */}
       {/* <Signup /> */}
+      {/* <SplashScreen /> */}
       <StatusBar style="auto" />
-      </NavigationContainer>
-      
+    </NavigationContainer>
+
     // </View>
   );
 }

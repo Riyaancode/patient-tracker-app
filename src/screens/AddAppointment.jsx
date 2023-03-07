@@ -6,8 +6,8 @@ import DateTimePicker, { DateTimePickerAndroid } from '@react-native-community/d
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import RadioGroup from 'react-native-radio-buttons-group';
 import Btn from '../components/Btn';
-import {  ref, set, push } from "firebase/database";
-import { database } from '../firebaseConfig';
+import {  ref, set, push, serverTimestamp } from "firebase/database";
+import { auth, database } from '../firebaseConfig';
 import { useHeaderHeight } from '@react-navigation/elements';
 
 export default function AddAppointment({navigation}) {
@@ -26,6 +26,7 @@ export default function AddAppointment({navigation}) {
             value: 'option2'
         }
     ]);
+    const currentTimestamp = serverTimestamp();
     const [gender, setGender] = useState("");
     const [name, setName] = useState("");
     const [disease, setDisease] = useState("");
@@ -47,7 +48,7 @@ export default function AddAppointment({navigation}) {
       const medicationNameChange = (value) => {
         setMedication(value);
       };
-    console.log(date.toLocaleDateString("en-US"))
+    // console.log(date.toLocaleDateString("en-US"))
     const AddPatientData = ()=>{
         const patientRef = push(ref(database, 'patients'));
         const patientId = patientRef.key;
@@ -57,12 +58,14 @@ export default function AddAppointment({navigation}) {
           "disease": disease,
           "medication": medication.split(","),
           "gender":gender,
-          "dateOfArrival": date.toLocaleDateString("en-US"),
-          "cost": cost
+          "dateOfArrival": currentTimestamp,
+          "cost": cost,
+          "doctor":auth.currentUser.uid,
+          "dob":date.toLocaleDateString("en-US")
         })
       
     .then(() => {
-        console.log("Sucessfully insert", patientId);
+        // console.log("Sucessfully insert", patientId);
         navigation.navigate("PatientList")
     })
     .catch((error) => {
@@ -148,7 +151,7 @@ export default function AddAppointment({navigation}) {
                                 <TextInput style={styles.input} value={disease} onChangeText={diseaseNameChange} placeholder={"Enter Patient Email Here"} />
                             </View>
                             <View style={styles.section}>
-                                <Text style={styles.label}>Medication </Text>
+                                <Text style={styles.label}>Medication {auth.currentUser.uid} </Text>
                                 <TextInput style={styles.input} value={medication} onChangeText={medicationNameChange} placeholder={"Enter Patient Email Here"} />
                             </View>
                             </ScrollView>

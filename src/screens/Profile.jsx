@@ -15,7 +15,7 @@ const [currUser, SetCurrUser] = useState({});
         getData();
     },[])
 
-console.log(">>>>",currUser)
+// console.log(">>>>",currUser)
 function getData(params) {
     const starCountRef = ref(database, 'users/');
     onValue(starCountRef, (snapshot) => {
@@ -37,7 +37,8 @@ function getData(params) {
 
     const logout = ()=>{
         signOut(auth).then(() => {
-            navigation.navigate("Login")
+            // navigation.navigate("Login")
+            console.log("Signout", auth)
           }).catch((error) => {
             // An error happened.
             console.log(error)

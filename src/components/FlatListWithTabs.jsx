@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity, FlatList, Image, StyleSheet } from "react-native";
 import { theme } from '../constant';
-import { ref, child, get, onValue } from "firebase/database";
-import { database } from "../firebaseConfig";
+import { ref, child, get, onValue, orderByChild, query, equalTo } from "firebase/database";
+import { auth, database } from "../firebaseConfig";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
@@ -20,26 +20,50 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 
-const ListItem = ({ navigation, name, dateOfArrival, gender, medication, cost, disease }) => (
+const ListItem = ({ navigation, name, dateOfArrival, gender, medication, cost, disease, dob }) => {
+  
+  const date = new Date(dateOfArrival);
+const dateString = date.toLocaleDateString("en-US");
+  
+  return (
   <View style={styles.list}>
     <View style={{ flexDirection: "row", alignItems: "center" }}>
       <Image style={styles.listImg} source={require("../assets/img/patient-img.png")} />
       <View>
         <Text style={styles.name}>{name}</Text>
-        <Text style={styles.date}>{dateOfArrival}</Text>
+        <Text style={styles.date}>{dateString}</Text>
       </View>
     </View>
-    <TouchableOpacity onPress={() => navigation.navigate("PatientDetails", { name, dateOfArrival, gender, medication, cost, disease })}>
+    <TouchableOpacity onPress={() => navigation.navigate("PatientDetails", { name, dateString, gender, medication, cost, disease, dob })}>
       <Ionicons name="caret-forward" size={40} color={theme.COLORS.Primary} />
     </TouchableOpacity>
   </View>
-);
+)};
 
-const FlatListWithTabs = ({ patientData, navigation }) => {
+const FlatListWithTabs = ({ navigation, searchQuery, newData }) => {
   // const [data,setPatientsData] = useState([])
   // const data = []
-  const [data, setData] = useState([]);
+  console.log("++-->",newData)
+  const [data, setData] = useState(newData);
 
+
+  // Check if searched text is not blank
+  // if (searchQuery) {
+  
+  //   const newData = data.filter(
+  //     function (item) {
+  //       const itemData = item.title
+  //         ? item.title.toUpperCase()
+  //         : ''.toUpperCase();
+  //       const textData = searchQuery.toUpperCase();
+  //       return itemData.indexOf(textData) > -1;
+  //   });
+  //   setData(newData);
+   
+  // } 
+// console.log("++++>>>>>>", data)
+
+  
   const tabs = [{ disease: "All" }];
   const diseases = data.map(item => item.disease);
   const distinctDiseases = [...new Set(diseases)];
@@ -84,19 +108,27 @@ const FlatListWithTabs = ({ patientData, navigation }) => {
   // }, [])
 
   useEffect(() => {
-    const starCountRef = ref(database, 'patients/');
-    onValue(starCountRef, (snapshot) => {
-      const pdata = snapshot.val();
-      // console.log("pdata", pdata)
-      // updateStarCount(postElement, data);
-      const dataArray = Object.keys(pdata).map((key) => ({ id: key, ...pdata[key] }))
-      // console.log("dataArray", dataArray)
-      // console.log(dataArray)
-      setData(dataArray)
-      // setFilteredData(dataArray)
-      console.log('data=>>>>', dataArray)
+    // const starCountRef = query(database.ref('patients'), orderByChild('doctor').equalTo(auth.currentUser.uid));
+    // onValue(starCountRef, (snapshot) => {
+    //   const pdata = snapshot.val();
+    //   const dataArray = Object.keys(pdata).map((key) => ({ id: key, ...pdata[key] }))
+    //   setData(dataArray)
+    //   console.log('data=>>>>', dataArray)
 
-    }, [])
+    // }, [])
+
+    const filteredRef = query(
+      ref(database, "patients"),
+      orderByChild("doctor"),
+      equalTo(auth.currentUser.uid)
+    );
+    
+    onValue(filteredRef, (snapshot) => {
+      const pdata = snapshot.val();
+      const dataArray = Object.keys(pdata).map((key) => ({ id: key, ...pdata[key] }));
+      setData(dataArray);
+      console.log("filtered data =>>>", dataArray);
+    });
 
   }, [])
 
@@ -104,7 +136,8 @@ const FlatListWithTabs = ({ patientData, navigation }) => {
   useEffect(() => {
     // filterData(0)
     setFilteredData([data])
-  }, [data])
+    setData(newData)
+  }, [data, newData])
 
 
 
@@ -165,7 +198,7 @@ const FlatListWithTabs = ({ patientData, navigation }) => {
         style={styles.listSec}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
-          <ListItem navigation={navigation} name={item.name} dateOfArrival={item.dateOfArrival} cost={item.cost} disease={item.disease} medication={item.medication} gender={item.gender} />
+          <ListItem navigation={navigation} name={item.name} dateOfArrival={item.dateOfArrival} cost={item.cost} disease={item.disease} medication={item.medication} gender={item.gender} dob={item.dob} />
         )}
         keyExtractor={(item) => item.id.toString()}
       />

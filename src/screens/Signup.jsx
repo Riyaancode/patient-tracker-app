@@ -17,7 +17,7 @@ export default function Signup({ navigation }) {
         setName(value);
       };
     const handleEmail = (value) => {
-        console.log(value)
+        // console.log(value)
     setEmail(value);
     };
     const handlePass = (value) => {
@@ -43,7 +43,7 @@ export default function Signup({ navigation }) {
         })
       
     .then(() => {
-        console.log("Sucessfully insert", userId);
+        console.log("Sucessfully Signup", userId);
         navigation.replace("BottomTabs")
     })
     .catch((error) => {
