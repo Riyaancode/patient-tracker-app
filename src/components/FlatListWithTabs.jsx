@@ -43,7 +43,7 @@ const dateString = date.toLocaleDateString("en-US");
 const FlatListWithTabs = ({ navigation, searchQuery, newData }) => {
   // const [data,setPatientsData] = useState([])
   // const data = []
-  console.log("++-->",newData)
+  // console.log("++-->",newData)
   const [data, setData] = useState(newData);
 
 
@@ -127,7 +127,7 @@ const FlatListWithTabs = ({ navigation, searchQuery, newData }) => {
       const pdata = snapshot.val();
       const dataArray = Object.keys(pdata).map((key) => ({ id: key, ...pdata[key] }));
       setData(dataArray);
-      console.log("filtered data =>>>", dataArray);
+      // console.log("filtered data =>>>", dataArray);
     });
 
   }, [])
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     color: "white"
   },
   tabsList: {
-    // marginTop:30,
+    marginTop:10,
 
   },
   list: {

@@ -8,26 +8,41 @@ import { useEffect, useState } from 'react';
 import { auth,database } from '../firebaseConfig';
 import {  ref, set, push, onValue, query, orderByChild, equalTo } from "firebase/database";
 import { getAuth } from 'firebase/auth';
+import DateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
+import CustomDatePicker from '../components/CustomDatePicker';
 export default function Home({navigation}) {
 const auth = getAuth()
 const [currUser, SetCurrUser] = useState({});
 const [newData, setNewData] = useState([]);
 const [newFilterData, setNewFilterData] = useState([]);
-
 const [searchQuery, setSearchQuery] = useState("");
+// const [date, setDate] = useState(new Date());
+// const [showDatePicker, setShowDatePicker] = useState(false);
+const [selectedDate, setSelectedDate] = useState(null);
+  
 
+  useEffect(()=>{
+    console.log(selectedDate)
+  }, [selectedDate])
+  // const handleDateChange = (selectedDate) => {
+  //   setSelectedDate(selectedDate);
+  // };
 
 
     useEffect(()=>{
-      console.log(newFilterData)
+      // console.log(newFilterData)
         getDoctorData();
         getPatientsData();
       
     },[])
 
     useEffect(()=>{
-      searchFilterFunction("")
+      nameFilter("")
     }, [newData])
+
+    // useEffect(()=>{
+    //   dateFilter(null)
+    // }, [selectedDate])
 
 // console.log(">>>>",currUser)
 function getDoctorData(params) {
@@ -61,13 +76,13 @@ const getPatientsData = () => {
       const pdata = snapshot.val();
       const dataArray = Object.keys(pdata).map((key) => ({ id: key, ...pdata[key] }));
       setNewData(dataArray);
-      console.log("fPr data =>>>", dataArray);
+      // console.log("fPr data =>>>", dataArray);
     });
 
   }
 
 
-  const searchFilterFunction = (text) => {
+  const nameFilter = (text) => {
     // Check if searched text is not blank
     if (text !== "") {
       // Inserted text is not blank
@@ -88,7 +103,30 @@ const getPatientsData = () => {
       // Update FilteredDataSource with masterDataSource
       setNewFilterData(newData)
       setSearchQuery(text);
-      console.log("els")
+      
+    }
+  };
+
+  const dateFilter = (date) => {
+    // Check if searched text is not blank
+    if (date !== null) {
+     
+      const filterData =  newFilterData.filter(
+        function (item) {
+          const itemData = new Date(item.dateOfArrival).toLocaleDateString("en-US")
+        //  console.log("++++",itemData)
+        console.log("set",date)
+        console.log("get",itemData)
+          return itemData.indexOf(date.toLocaleDateString("en-US")) > -1;
+      });
+      //  console.log(filterData)
+      setNewFilterData(filterData)
+      setSelectedDate(date);
+    } else {
+      // Inserted text is blank
+      // Update FilteredDataSource with masterDataSource
+      setNewFilterData(newData)
+      // setSelectedDate(date.toLocaleDateString("en-US"));
     }
   };
 
@@ -119,15 +157,32 @@ const getPatientsData = () => {
             <ImageBackground style={styles.bg} source={require("../assets/img/bg.png")}>
                 {/* <View style={styles.searchSection}> */}
                 <View style={styles.search}>
+                  <View style={{flexDirection:'row',justifyContent:'center', alignItems:'center'}}>
                     <Ionicons name="search-outline" size={24} color="gray" />
                     <TextInput
                         style={styles.searchInput}
                         placeholder="Search"
                         placeholderTextColor="gray"
-                    onChangeText={(e)=> searchFilterFunction(e)}
+                    onChangeText={(e)=> nameFilter(e)}
                     // onSubmitEditing={handleSearch}
                     value={searchQuery}
                     />
+                    </View>
+                    {/* <TouchableOpacity onPress={showDatepicker}>
+                    <Ionicons name="calendar" size={24} color="gray" />
+                    {showDatePicker && (
+                                        <DateTimePicker
+                                            value={date}
+                                            mode="date"
+                                            display="default"
+                                           
+                                            onChange={handleDateChange}
+                                            maximumDate={new Date()} // to set max date
+                                            minimumDate={new Date(1990, 0, 1)} // to set min date
+                                        />
+                                    )}
+                    </TouchableOpacity> */}
+                     <CustomDatePicker value={selectedDate} onChange={(e)=>dateFilter(e)} />
                 </View>
                 {/* </View> */}
 
@@ -167,27 +222,28 @@ const styles = StyleSheet.create({
     },
     search: {
         backgroundColor: 'white',
-        width: theme.SIZES.width / 1.1,
-        paddingVertical: 14,
-        paddingHorizontal: 25,
+        width: theme.SIZES.width /1.1,
+        paddingVertical: 10,
+        paddingHorizontal: 16,
         borderRadius: 10,
         flexDirection: 'row',
         position: 'absolute',
         top: -28,
         alignSelf: 'center',
-        zIndex: 1
+        zIndex: 1,
+        marginHorizontal:20,
+        justifyContent:'space-between',
+        alignItems:'center',
+      
     },
     searchInput: {
-        marginHorizontal: 14,
-        fontSize: 20,
-        width: '100%'
+        fontSize: 22,
+        // width: theme.SIZES.width /1.4,
     },
     searchSection: {
-        // position:'relative'
+        position:'relative',
         alignItems: 'center',
-        // flex:0,
-
-        backgroundColor: "#8989"
+        justifyContent:'space-evenly'
 
     },
     profile: {
