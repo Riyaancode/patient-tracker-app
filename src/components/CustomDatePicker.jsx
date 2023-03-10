@@ -6,28 +6,34 @@ import { theme } from '../constant';
 
 const CustomDatePicker = ({ value, onChange }) => {
     const [showDatePicker, setShowDatePicker] = useState(false);
-    const [count, setCount] = useState(1);
+    const [count, setCount] = useState(0);
     const handleDateChange = (event, selectedDate) => {
+        console.log("Current Date>>>>>>>>>", selectedDate)
         setShowDatePicker(false);
         onChange(selectedDate);
     };
 
     const showDatePickerModal = () => {
-        if(count > 1){
+        console.log("COUNT",count)
+        console.log("VALUE",value)
+
+        if(count < 1){
+        setShowDatePicker(true);
+        setCount(count + 1)
+        }else{
         setShowDatePicker(false);
         onChange(null);
-        setCount(0)
-        value = false
-        }else{
-        setShowDatePicker(true);
-        setCount(count + 1);
+        setCount(0);
+        value = null
+        console.log("VALUE2",value)
         }
+    
     };
 
     return (
         <>
             <TouchableOpacity onPress={showDatePickerModal} style={styles.datePicker}>
-                <Text style={styles.date}>{value? value.toLocaleDateString()  : <Ionicons name="calendar" size={24} color="gray" />}</Text>
+                <Text style={styles.date}>{count < 1?  <Ionicons name="calendar" size={24} color="gray" />: (value ? value.toLocaleDateString() : "")}</Text>
             </TouchableOpacity>
 
             <Modal visible={showDatePicker} style={{
@@ -44,9 +50,6 @@ const CustomDatePicker = ({ value, onChange }) => {
                             <Text style={styles.modalHeaderButton}>Done</Text>
                         </TouchableOpacity>
 
-                    </View>
-                    <View style={{ backgroundColor: "red", }}>
-                        <TouchableOpacity><Text style={{ color: "white", fontSize: 24 }}>Clear</Text></TouchableOpacity>
                     </View>
                     {Platform.OS === 'ios' ? (
                         <DateTimePicker

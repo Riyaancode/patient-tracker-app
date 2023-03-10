@@ -115,8 +115,8 @@ const getPatientsData = () => {
         function (item) {
           const itemData = new Date(item.dateOfArrival).toLocaleDateString("en-US")
         //  console.log("++++",itemData)
-        console.log("set",date)
-        console.log("get",itemData)
+        // console.log("set",date)
+        // console.log("get",itemData)
           return itemData.indexOf(date.toLocaleDateString("en-US")) > -1;
       });
       //  console.log(filterData)
