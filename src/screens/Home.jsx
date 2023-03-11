@@ -9,16 +9,23 @@ import { auth,database } from '../firebaseConfig';
 import {  ref, set, push, onValue, query, orderByChild, equalTo } from "firebase/database";
 import { getAuth } from 'firebase/auth';
 import CustomDatePicker from '../components/CustomDatePicker';
+// import debounce from 'lodash.debounce';
+
+
+
+
+
+
 export default function Home({navigation}) {
 const auth = getAuth()
 const [currUser, SetCurrUser] = useState({});
 const [newData, setNewData] = useState([]);
 const [newFilterData, setNewFilterData] = useState([]);
 const [searchQuery, setSearchQuery] = useState("");
-// const [date, setDate] = useState(new Date());
-// const [showDatePicker, setShowDatePicker] = useState(false);
 const [selectedDate, setSelectedDate] = useState(null);
-  
+
+
+
 
   useEffect(()=>{
     console.log(selectedDate)
@@ -106,6 +113,14 @@ const getPatientsData = () => {
     }
   };
 
+
+  const handleSearch = (text)=>{
+    // setTimeout(() => {
+    nameFilter(text);
+
+  // }, 2000)
+  }
+
   const dateFilter = (date) => {
     // Check if searched text is not blank
     if (date !== null) {
@@ -162,7 +177,7 @@ const getPatientsData = () => {
                         style={styles.searchInput}
                         placeholder="Search"
                         placeholderTextColor="gray"
-                    onChangeText={(e)=> nameFilter(e)}
+                    onChangeText={(text)=> handleSearch(text)}
                     // onSubmitEditing={handleSearch}
                     value={searchQuery}
                     />

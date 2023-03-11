@@ -41,14 +41,21 @@ export default function BottomTabs() {
       },
       tabBarActiveTintColor: theme.COLORS.Primary,
       tabBarInactiveTintColor: 'gray',
-      tabBarShowLabel: false,
+      // tabBarShowLabel: false,
+   
+      headerStyle:{
+        height:100,
+    
+        
+      },
       headerTransparent: true,
       headerTitleAlign: 'left',
       headerTitleStyle: {
         marginLeft: 10,
         fontSize: 24,
         fontWeight:"700",
-        color:theme.COLORS.primeText
+        color:theme.COLORS.primeText,
+        
       },
     })}
     >

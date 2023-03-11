@@ -162,8 +162,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        padding: 20,
-        marginTop:60
+        paddingHorizontal: 20,
+        marginTop:100
     },
     bg: {
         flex: 1,

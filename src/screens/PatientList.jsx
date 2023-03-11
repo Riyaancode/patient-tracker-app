@@ -115,6 +115,7 @@ const getPatientsData = () => {
   return (
     
       <ImageBackground style={styles.bg} source={require("../assets/img/bg.png")}>
+        
         <View style={styles.container}>
         <View style={styles.searchSection}>
         {/* <View style={styles.search}>
@@ -154,11 +155,10 @@ const getPatientsData = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    
-    alignItems: 'stretch',
+    // alignItems: 'stretch',
     justifyContent: 'center',
     width: theme.SIZES.width,
-    marginTop:70
+    marginTop:100,
   },
   bg: {
     flex: 1,

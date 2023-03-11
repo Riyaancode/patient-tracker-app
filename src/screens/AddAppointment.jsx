@@ -6,11 +6,11 @@ import DateTimePicker, { DateTimePickerAndroid } from '@react-native-community/d
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import RadioGroup from 'react-native-radio-buttons-group';
 import Btn from '../components/Btn';
-import {  ref, set, push, serverTimestamp } from "firebase/database";
+import { ref, set, push, serverTimestamp } from "firebase/database";
 import { auth, database } from '../firebaseConfig';
 import { useHeaderHeight } from '@react-navigation/elements';
 
-export default function AddAppointment({navigation}) {
+export default function AddAppointment({ navigation }) {
     const height = useHeaderHeight()
     const [date, setDate] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
@@ -33,44 +33,44 @@ export default function AddAppointment({navigation}) {
     const [cost, setCost] = useState(0);
     const [medication, setMedication] = useState("");
 
-   
+
     const handleNameChange = (value) => {
         setName(value);
-      };
+    };
 
-      const diseaseNameChange = (value) => {
+    const diseaseNameChange = (value) => {
         setDisease(value);
-      };
+    };
 
-      const costChange = (value) => {
+    const costChange = (value) => {
         setCost(value);
-      };
-      const medicationNameChange = (value) => {
+    };
+    const medicationNameChange = (value) => {
         setMedication(value);
-      };
+    };
     // console.log(date.toLocaleDateString("en-US"))
-    const AddPatientData = ()=>{
+    const AddPatientData = () => {
         const patientRef = push(ref(database, 'patients'));
         const patientId = patientRef.key;
-      
+
         set(patientRef, {
-          "name": name,
-          "disease": disease,
-          "medication": medication.split(","),
-          "gender":gender,
-          "dateOfArrival": currentTimestamp,
-          "cost": cost,
-          "doctor":auth.currentUser.uid,
-          "dob":date.toLocaleDateString("en-US")
+            "name": name,
+            "disease": disease,
+            "medication": medication.split(","),
+            "gender": gender,
+            "dateOfArrival": currentTimestamp,
+            "cost": cost,
+            "doctor": auth.currentUser.uid,
+            "dob": date.toLocaleDateString("en-US")
         })
-      
-    .then(() => {
-        // console.log("Sucessfully insert", patientId);
-        navigation.navigate("PatientList")
-    })
-    .catch((error) => {
-        console.log("Error not", error);
-    });
+
+            .then(() => {
+                // console.log("Sucessfully insert", patientId);
+                navigation.navigate("PatientList")
+            })
+            .catch((error) => {
+                console.log("Error not", error);
+            });
     }
 
 
@@ -79,16 +79,16 @@ export default function AddAppointment({navigation}) {
 
     function onPressRadioButton(radioButtonsArray) {
         setRadioButtons(radioButtonsArray);
-        radioButtonsArray.map((gender)=>{
+        radioButtonsArray.map((gender) => {
 
             if (gender.selected === true && gender.label === "Male") {
                 setGender("Male")
-            }else if(gender.selected === true && gender.label === "Female"){
+            } else if (gender.selected === true && gender.label === "Female") {
                 setGender("Female")
             }
-           
+
         })
-       
+
     }
 
 
@@ -103,12 +103,13 @@ export default function AddAppointment({navigation}) {
     };
 
     return (
+        <ImageBackground style={styles.bg} source={require("../assets/img/bg.png")}>
+            <View style={styles.container}>
 
-        <View style={styles.container}>
-            <ImageBackground style={styles.bg} source={require("../assets/img/bg.png")}>
                 <View style={styles.form}>
-                        <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={height} >
-                        <ScrollView showsVerticalScrollIndicator={true} >
+                    <ScrollView showsVerticalScrollIndicator={true} >
+                        <KeyboardAvoidingView behavior='position'  >
+
 
                             <View style={styles.section}>
                                 <Text style={styles.label}>Patient’s Name</Text>
@@ -151,37 +152,36 @@ export default function AddAppointment({navigation}) {
                                 <TextInput style={styles.input} value={disease} onChangeText={diseaseNameChange} placeholder={"Enter Patient Email Here"} />
                             </View>
                             <View style={styles.section}>
-                                <Text style={styles.label}>Medication {auth.currentUser.uid} </Text>
+                                <Text style={styles.label}>Medication </Text>
                                 <TextInput style={styles.input} value={medication} onChangeText={medicationNameChange} placeholder={"Enter Patient Email Here"} />
                             </View>
-                            </ScrollView>
-                        </KeyboardAvoidingView>
 
-                    
+                        </KeyboardAvoidingView>
+                    </ScrollView>
+
                 </View>
                 <Btn title={"Submit"} submitFunct={AddPatientData} />
-            </ImageBackground>
-        </View>
 
+            </View>
+        </ImageBackground>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-
+        justifyContent: 'center',
+        paddingHorizontal: 16,
+        marginTop: 70,
     },
     bg: {
         flex: 1,
-        justifyContent: 'center',
-        // alignItems: 'center',
-        paddingHorizontal: 16,
     },
     form: {
         backgroundColor: "white",
         borderRadius: 15,
         flex: 0.9,
-        marginTop: 50,
+       
         padding: 20
     },
     label: {
