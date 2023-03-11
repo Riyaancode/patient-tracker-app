@@ -6,16 +6,15 @@ import { getAuth } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { equalTo, onValue, orderByChild, query, ref } from 'firebase/database';
 import { database } from '../firebaseConfig';
-
+import CustomDatePicker from '../components/CustomDatePicker';
 
 export default function PatientList({navigation}) {
   const auth = getAuth()
 const [currUser, SetCurrUser] = useState({});
 const [newData, setNewData] = useState([]);
 const [newFilterData, setNewFilterData] = useState([]);
-
 const [searchQuery, setSearchQuery] = useState("");
-
+const [selectedDate, setSelectedDate] = useState(null);
 
 
     useEffect(()=>{
@@ -89,12 +88,36 @@ const getPatientsData = () => {
     }
   };
 
+  const dateFilter = (date) => {
+    // Check if searched text is not blank
+    if (date !== null) {
+     
+      const filterData =  newFilterData.filter(
+        function (item) {
+          const itemData = new Date(item.dateOfArrival).toLocaleDateString("en-US")
+        //  console.log("++++",itemData)
+        // console.log("set",date)
+        // console.log("get",itemData)
+          return itemData.indexOf(date.toLocaleDateString("en-US")) > -1;
+      });
+      //  console.log(filterData)
+      setNewFilterData(filterData)
+      setSelectedDate(date);
+    } else {
+      // Inserted text is blank
+      // Update FilteredDataSource with masterDataSource
+      setNewFilterData(newData)
+      // setSelectedDate(date.toLocaleDateString("en-US"));
+    }
+  };
+
+
   return (
     
       <ImageBackground style={styles.bg} source={require("../assets/img/bg.png")}>
         <View style={styles.container}>
         <View style={styles.searchSection}>
-        <View style={styles.search}>
+        {/* <View style={styles.search}>
           <Ionicons name="search-outline" size={24} color="gray" />
           <TextInput
             style={styles.searchInput}
@@ -103,9 +126,23 @@ const getPatientsData = () => {
             onChangeText={(e)=> searchFilterFunction(e)}
             value={searchQuery}
           />
+           <CustomDatePicker value={selectedDate} onChange={(e)=>dateFilter(e)} />
+        </View> */}
+       <View style={styles.search}>
+                  <View style={{flexDirection:'row',justifyContent:'center', alignItems:'center'}}>
+                    <Ionicons name="search-outline" size={24} color="gray" />
+                    <TextInput
+                        style={styles.searchInput}
+                        placeholder="Search"
+                        placeholderTextColor="gray"
+                        onChangeText={(e)=> searchFilterFunction(e)}
+                        value={searchQuery}
+                    />
+                    </View>
+                     <CustomDatePicker value={selectedDate} onChange={(e)=>dateFilter(e)} />
+                </View>
         </View>
-        </View>
-
+      
         <FlatListWithTabs navigation={navigation} newData={newFilterData} />
         </View>
       </ImageBackground>
@@ -130,19 +167,21 @@ const styles = StyleSheet.create({
 
   search: {
     backgroundColor: 'white',
-    width: theme.SIZES.width / 1.1,
-    paddingVertical: 14,
-    paddingHorizontal: 25,
+    width: theme.SIZES.width /1.1,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
     borderRadius: 10,
     flexDirection: 'row',
     alignSelf: 'center',
-
-  },
-  searchInput: {
-    marginHorizontal: 14,
-    fontSize: 20,
-    width: '100%'
-  },
+    marginHorizontal:20,
+    justifyContent:'space-between',
+    alignItems:'center',
+  
+},
+searchInput: {
+    fontSize: 22,
+    // width: theme.SIZES.width /1.4,
+},
   searchSection: {
     // position:'relative'
     alignItems: 'center',

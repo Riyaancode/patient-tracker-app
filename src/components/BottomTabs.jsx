@@ -46,7 +46,9 @@ export default function BottomTabs() {
       headerTitleAlign: 'left',
       headerTitleStyle: {
         marginLeft: 10,
-        fontSize: 20,
+        fontSize: 24,
+        fontWeight:"700",
+        color:theme.COLORS.primeText
       },
     })}
     >
@@ -58,7 +60,8 @@ export default function BottomTabs() {
       <Tab.Screen name="Profile" component={Profile} options={{ headerTitleStyle: { 
       color: 'white',
       marginLeft:10,
-      fontSize:20
+      fontSize:24,
+      fontWeight:"700"
     } }} />
     </Tab.Navigator>
   );

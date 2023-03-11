@@ -8,7 +8,6 @@ import { useEffect, useState } from 'react';
 import { auth,database } from '../firebaseConfig';
 import {  ref, set, push, onValue, query, orderByChild, equalTo } from "firebase/database";
 import { getAuth } from 'firebase/auth';
-import DateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import CustomDatePicker from '../components/CustomDatePicker';
 export default function Home({navigation}) {
 const auth = getAuth()
@@ -186,7 +185,7 @@ const getPatientsData = () => {
                 </View>
                 {/* </View> */}
 
-                <View style={{ flex:1, marginTop:30 }}>
+                <View style={{ flex:1, marginTop:40 }}>
                 <FlatListWithTabs  navigation={navigation} newData={newFilterData}  />
                  </View> 
            

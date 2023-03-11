@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     color: "white"
   },
   tabsList: {
-    marginTop:10,
+    // marginTop:10,
 
   },
   list: {
