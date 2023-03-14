@@ -74,12 +74,14 @@ export default function Profile({ navigation }) {
           <View style={styles.field}>
             <Text style={styles.label}>Name</Text>
             <Text style={styles.textField}>
-              {currUser.name || auth.currentUser.displayName}
+              {currUser ? currUser.name : auth.currentUser.displayName}
             </Text>
           </View>
           <View style={styles.field}>
             <Text style={styles.label}>Email</Text>
-            <Text style={styles.textField}>{currUser.email}</Text>
+            <Text style={styles.textField}>
+              {currUser ? currUser.email : auth.currentUser.email}
+            </Text>
           </View>
           {/* <View style={styles.field}>
                         <Text style={styles.label}>Date of birth</Text>
