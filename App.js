@@ -1,15 +1,21 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
-import Home from './screens/Home';
-import Signup from './screens/Signup';
-import BottomTabs from './components/BottomTabs';
-import Login from './screens/Login';
-import PatientDetails from './screens/PatientDetails';
-import { auth } from './firebaseConfig';
-import SplashScreen from './screens/SplashScreen';
 import { useEffect, useState } from 'react';
+import BottomTabs from "./src/components/BottomTabs";
+import Home from "./src/screens/Home";
+import Login from "./src/screens/Login";
+import Signup from "./src/screens/Signup";
+import PatientDetails from './src/screens/PatientDetails';
+import SplashScreen from './src/screens/SplashScreen';
+import { auth } from './src/firebaseConfig';
+
 const Stack = createNativeStackNavigator();
+
+
+
+
+
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSignedIn, setIsSignedIn] = useState(false);

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "patient-tracker-app",
-    "slug": "patient-tracker-app",
+    "name": "Med Track",
+    "slug": "medtrack",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,12 +22,18 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/anImageThatDoesNotExist.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-       }
+      },
+      "package": "com.medtrack.myapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "935c1817-3426-47ed-bffc-07c5f2daca78"
+      }
     }
   }
 }
