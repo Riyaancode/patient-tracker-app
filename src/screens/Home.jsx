@@ -159,7 +159,7 @@ export default function Home({ navigation }) {
         <View style={styles.innerPro}>
           <View>
             <Text style={styles.userName}>
-              Hi, Dr {currUser.name || auth.currentUser.displayName}!{" "}
+              Hi, Dr {currUser ? currUser.name : auth.currentUser.displayName}!{" "}
             </Text>
             <Text style={styles.searchHead}>Find Your Patient </Text>
           </View>
