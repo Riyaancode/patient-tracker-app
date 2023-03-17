@@ -91,7 +91,9 @@ export default function Profile({ navigation }) {
                         <Text style={styles.label}>Location</Text>
                         <Text style={styles.textField}>2216 Oakway Lane, Woodland Hills, California, United States</Text>
                     </View> */}
-          <Btn title={"Signout"} submitFunct={logout} />
+          <View style={{ alignItems: "center", justifyContent: "center" }}>
+            <Btn s title={"Signout"} submitFunct={logout} />
+          </View>
         </ScrollView>
       </View>
     </ImageBackground>

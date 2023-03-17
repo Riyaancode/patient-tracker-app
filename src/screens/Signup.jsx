@@ -68,10 +68,9 @@ export default function Signup({ navigation }) {
   return (
     <ImageBackground style={styles.bg} source={require("../assets/img/bg.png")}>
       <View style={styles.head}>
-        <Text style={styles.title}>Join us to start searching</Text>
+        <Text style={styles.title}>Welcome to MedTrack!</Text>
         <Text style={styles.desc}>
-          You can search c ourse, apply course and find scholarship for abroad
-          studies
+          Ready to take control of your patient data? Sign up now to get started
         </Text>
       </View>
       {/* <View style={styles.btns} >
@@ -121,6 +120,7 @@ export default function Signup({ navigation }) {
             </TouchableOpacity>
           </ScrollView>
         </KeyboardAvoidingView>
+
         <TouchableOpacity onPress={() => navigation.navigate("Login")}>
           <Text style={{ textAlign: "center", color: theme.COLORS.Primary }}>
             Have an account? Log in
@@ -136,10 +136,11 @@ const styles = StyleSheet.create({
     backgroundColor: theme.COLORS.Primary,
     paddingVertical: theme.SIZES.base,
     paddingHorizontal: theme.SIZES.base * 2,
-    width: "90%",
+    width: "100%",
     alignItems: "center",
     borderRadius: 10,
     margin: 10,
+    marginHorizontal: "auto",
   },
   btnText: {
     fontSize: 22,
