@@ -44,6 +44,7 @@ export default function Login({ navigation }) {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        alert(errorMessage);
         console.log(error);
       });
   };

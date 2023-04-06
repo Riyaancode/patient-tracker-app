@@ -92,7 +92,7 @@ export default function Profile({ navigation }) {
                         <Text style={styles.textField}>2216 Oakway Lane, Woodland Hills, California, United States</Text>
                     </View> */}
           <View style={{ alignItems: "center", justifyContent: "center" }}>
-            <Btn s title={"Signout"} submitFunct={logout} />
+            <Btn s title={"Signout"} submitFunct={() => logout()} />
           </View>
         </ScrollView>
       </View>

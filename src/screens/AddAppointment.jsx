@@ -109,7 +109,7 @@ export default function AddAppointment({ navigation }) {
       <View style={styles.container}>
         <View style={styles.form}>
           <ScrollView showsVerticalScrollIndicator={true}>
-            <KeyboardAvoidingView behavior="position">
+            <KeyboardAvoidingView behavior="padding">
               <View style={styles.section}>
                 <Text style={styles.label}>Patient’s Name</Text>
                 <TextInput
