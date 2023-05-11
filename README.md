@@ -36,9 +36,23 @@ To run the Med Track app on your local machine, follow these steps:
 
 Note: To use Firebase Realtime Database, you need to create a Firebase project and configure it in the app.
 
-## Web Version
 
-A web version of this app is also available at https://medtrack.vercel.app/. Note that some features, such as searching patients by date and picking a date to add the patient's date of birth, only work in the mobile app.
+
+## Accessing the MedTrack App
+To access the MedTrack app using Expo Go:
+
+1. Open your preferred web browser and navigate to the following link:
+`https://expo.dev/@riyancode/medtrack?serviceType=classic&distribution=expo-go`
+
+2. Launch the Expo Go app on your mobile device.
+
+3. Tap the "Scan QR Code" button within the Expo Go app.
+
+4. Use your device's camera to scan the QR code displayed on the webpage.
+
+5. Once scanned, Expo Go will load the MedTrack app, allowing you to explore its features and functionalities.
+
+That's it! You have successfully installed the Expo Go app and scanned the QR code to access the MedTrack app. Enjoy using the app!
 
 ## Conclusion
 
